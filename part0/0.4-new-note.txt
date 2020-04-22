@@ -1,0 +1,29 @@
+note over browser:
+Pressing 'Save' button
+triggers submit action
+end note
+
+browser->server: HTTP POST (with form data as body) <url>/new_note
+server-->browser: Redirect to <url>/notes
+
+browser->server: HTTP GET <url>/notes
+server-->browser: HTML-code
+
+browser->server: HTTP GET <url>/main.css
+server-->browser: main.css
+
+browser->server: HTTP GET <url>/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET <url>/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
