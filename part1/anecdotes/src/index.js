@@ -5,7 +5,7 @@ const Button = ({ handleClick, label }) => (
   <button onClick={handleClick}>{label}</button>
 );
 
-const App = (props) => {
+const App = ({anecdotes}) => {
   const [selected, setSelected] = useState(0);
 
   const randomAnecdote = (anecdotes) => {
@@ -15,9 +15,9 @@ const App = (props) => {
 
   return (
     <div>
-      <p>{props.anecdotes[selected]}</p>
+      <p>{anecdotes[selected]}</p>
       <Button
-        handleClick={() => randomAnecdote(props.anecdotes)}
+        handleClick={() => randomAnecdote(anecdotes)}
         label="next anecdote"
       />
     </div>
