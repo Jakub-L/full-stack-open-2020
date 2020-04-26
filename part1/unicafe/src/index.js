@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+const Button = ({ handleClick, label }) => (
+  <button onClick={handleClick}>{label}</button>
+);
+
 const Header = ({ text }) => <h1>{text}</h1>;
 
 const App = () => {
@@ -12,6 +16,9 @@ const App = () => {
   return (
     <div>
       <Header text="give feedback" />
+      <Button handleClick={() => setGood(good + 1)} label="good" />
+      <Button handleClick={() => setNeutral(neutral + 1)} label="neutral" />
+      <Button handleClick={() => setBad(bad + 1)} label="bad" />
       <Header text="statistics" />
     </div>
   );
