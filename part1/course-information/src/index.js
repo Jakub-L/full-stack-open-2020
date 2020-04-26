@@ -1,53 +1,51 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-const Header = (props) => {
-  return <h1>{props.course}</h1>;
+const Header = ({ course }) => {
+  return <h1>{course}</h1>;
 };
 
-const Part = (props) => {
+const Part = ({ part }) => {
   return (
     <p>
-      {props.part.name} {props.part.exercises}
+      {part.name} {part.exercises}
     </p>
   );
 };
 
-const Content = (props) => {
+const Content = ({ parts }) => {
   return (
     <>
-      <Part part={props.parts[0]} />
-      <Part part={props.parts[1]} />
-      <Part part={props.parts[2]} />
+      <Part part={parts[0]} />
+      <Part part={parts[1]} />
+      <Part part={parts[2]} />
     </>
   );
 };
 
-const Total = (props) => {
+const Total = ({ parts }) => {
   return (
     <p>
-      Number of exercises{' '}
-      {props.parts[0].exercises +
-        props.parts[1].exercises +
-        props.parts[2].exercises}
+      Number of exercises{" "}
+      {parts[0].exercises + parts[1].exercises + parts[2].exercises}
     </p>
   );
 };
 
 const App = () => {
   const course = {
-    name: 'Half Stack application development',
+    name: "Half Stack application development",
     parts: [
       {
-        name: 'Fundamentals of React',
+        name: "Fundamentals of React",
         exercises: 10,
       },
       {
-        name: 'Using props to pass data',
+        name: "Using props to pass data",
         exercises: 7,
       },
       {
-        name: 'State of a component',
+        name: "State of a component",
         exercises: 14,
       },
     ],
@@ -62,4 +60,4 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
