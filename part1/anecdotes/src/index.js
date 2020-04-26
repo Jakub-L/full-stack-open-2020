@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+const Anecdote = ({ header, anecdote, votes }) => {
+  return (
+    <>
+      <h1>{header}</h1>
+      <p>{anecdote}</p>
+      <p>has {votes} votes</p>
+    </>
+  );
+};
+
 const Button = ({ handleClick, label }) => (
   <button onClick={handleClick}>{label}</button>
 );
@@ -8,6 +18,7 @@ const Button = ({ handleClick, label }) => (
 const App = ({ anecdotes }) => {
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
+  const [bestIndex, setBest] = useState(0);
 
   const randomAnecdote = (anecdotes) => {
     const randomInt = Math.floor(Math.random() * anecdotes.length);
@@ -18,16 +29,25 @@ const App = ({ anecdotes }) => {
     const newVotes = [...votes];
     newVotes[selected] += 1;
     setVotes(newVotes);
+    setBest(newVotes.indexOf(Math.max(...newVotes)));
   };
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
+      <Anecdote
+        header="Anecdote of the day"
+        anecdote={anecdotes[selected]}
+        votes={votes[selected]}
+      />
       <Button handleClick={() => increaseVote(selected)} label="vote" />
       <Button
         handleClick={() => randomAnecdote(anecdotes)}
         label="next anecdote"
+      />
+      <Anecdote
+        header="Anecdote with most votes"
+        anecdote={anecdotes[bestIndex]}
+        votes={votes[bestIndex]}
       />
     </div>
   );
