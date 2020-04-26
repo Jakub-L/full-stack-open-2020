@@ -7,14 +7,20 @@ const Button = ({ handleClick, label }) => (
 
 const Header = ({ text }) => <h1>{text}</h1>;
 
-const Statistics = ({ good, neutral, bad }) => (
-  <>
-    <Header text="statistics" />
-    <p>good {good}</p>
-    <p>neutral {neutral}</p>
-    <p>bad {bad}</p>
-  </>
-);
+const Statistics = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad;
+  return (
+    <>
+      <Header text="statistics" />
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+      <p>all {good + neutral + bad}</p>
+      <p>average {(good - bad) / total}</p>
+      <p>positive {(100 * good) / total}%</p>
+    </>
+  );
+};
 
 const App = () => {
   const [good, setGood] = useState(0);
