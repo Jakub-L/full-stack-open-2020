@@ -7,17 +7,23 @@ const Button = ({ handleClick, label }) => (
 
 const Header = ({ text }) => <h1>{text}</h1>;
 
+const Statistic = ({ text, value }) => (
+  <p>
+    {text} {value}
+  </p>
+);
+
 const Statistics = ({ good, neutral, bad }) => {
   const total = good + neutral + bad;
   if (total > 0) {
     return (
       <>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-        <p>all {total}</p>
-        <p>average {(good - bad) / total}</p>
-        <p>positive {(100 * good) / total}%</p>
+        <Statistic text="good" value={good} />
+        <Statistic text="neutral" value={neutral} />
+        <Statistic text="bad" value={bad} />
+        <Statistic text="all" value={total} />
+        <Statistic text="average" value={(good - bad) / total} />
+        <Statistic text="positive" value={`${(100 * good) / total}%`} />
       </>
     );
   } else {
