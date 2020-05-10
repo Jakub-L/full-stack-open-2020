@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Filter from "./Filter";
 import Country from "./Country";
+import CountrySelector from "./CountrySelector";
 
 function App() {
   const [filter, setFilter] = useState("");
@@ -31,7 +32,9 @@ function App() {
       ) : filteredCountries.length === 1 ? (
         <Country country={filteredCountries[0]} />
       ) : (
-        filteredCountries.map(({ name }) => <p key={name}>{name}</p>)
+        filteredCountries.map(({ name }) => (
+          <CountrySelector key={name} name={name} setFilter={setFilter} />
+        ))
       )}
     </div>
   );
