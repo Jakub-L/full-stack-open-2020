@@ -1,20 +1,24 @@
 import React from "react";
 
-function PersonForm({ newName, setNewName, newNumber, setNewNumber, addName }) {
+function PersonForm({ newPerson, setNewPerson, addName }) {
   return (
     <form onSubmit={addName}>
       <div>
         Name:
         <input
-          value={newName}
-          onChange={({ target }) => setNewName(target.value)}
+          value={newPerson.name}
+          onChange={({ target }) =>
+            setNewPerson({ ...newPerson, name: target.value })
+          }
         />
       </div>
       <div>
         Number:
         <input
-          value={newNumber}
-          onChange={({ target }) => setNewNumber(target.value)}
+          value={newPerson.number}
+          onChange={({ target }) =>
+            setNewPerson({ ...newPerson, number: target.value })
+          }
         />
       </div>
       <div>

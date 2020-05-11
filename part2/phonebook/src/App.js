@@ -6,8 +6,7 @@ import Persons from "./Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
+  const [newPerson, setNewPerson] = useState({ name: "", number: "" });
   const [textFilter, setTextFilter] = useState("");
 
   useEffect(() => {
@@ -18,18 +17,14 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault();
-    if (persons.some(({ name }) => name === newName)) {
-      alert(`${newName} is already in the phonebook`);
+    if (persons.some(({ name }) => name === newPerson.name)) {
+      alert(`${newPerson.name} is already in the phonebook`);
     } else {
       axios
-        .post("http://localhost:3001/persons", {
-          name: newName,
-          number: newNumber,
-        })
+        .post("http://localhost:3001/persons", newPerson)
         .then(({ data }) => {
           setPersons([...persons, data]);
-          setNewName("");
-          setNewNumber("");
+          setNewPerson({ name: "", number: "" });
         });
     }
   };
@@ -40,10 +35,8 @@ const App = () => {
       <Filter textFilter={textFilter} setTextFilter={setTextFilter} />
       <h3>Add a new person</h3>
       <PersonForm
-        newName={newName}
-        newNumber={newNumber}
-        setNewName={setNewName}
-        setNewNumber={setNewNumber}
+        newPerson={newPerson}
+        setNewPerson={setNewPerson}
         addName={addName}
       />
       <h2>Numbers</h2>
