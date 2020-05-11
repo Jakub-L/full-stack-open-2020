@@ -21,9 +21,16 @@ const App = () => {
     if (persons.some(({ name }) => name === newName)) {
       alert(`${newName} is already in the phonebook`);
     } else {
-      setPersons([...persons, { name: newName, number: newNumber }]);
-      setNewName("");
-      setNewNumber("");
+      axios
+        .post("http://localhost:3001/persons", {
+          name: newName,
+          number: newNumber,
+        })
+        .then(({ data }) => {
+          setPersons([...persons, data]);
+          setNewName("");
+          setNewNumber("");
+        });
     }
   };
 
