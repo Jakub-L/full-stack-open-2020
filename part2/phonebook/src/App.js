@@ -10,7 +10,7 @@ const App = () => {
   const [textFilter, setTextFilter] = useState("");
 
   useEffect(() => {
-    personService.getAll.then((response) => setPersons(response.data));
+    personService.getAll().then((response) => setPersons(response.data));
   }, []);
 
   const addName = (event) => {
@@ -21,6 +21,15 @@ const App = () => {
       personService.create(newPerson).then(({ data }) => {
         setPersons([...persons, data]);
         setNewPerson({ name: "", number: "" });
+      });
+    }
+  };
+
+  const handleRemove = (name, id) => {
+    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
+      personService.remove(id).then(() => {
+        setNewPerson({ name: "", number: "" });
+        personService.getAll().then((response) => setPersons(response.data));
       });
     }
   };
@@ -36,7 +45,11 @@ const App = () => {
         addName={addName}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} textFilter={textFilter} />
+      <Persons
+        persons={persons}
+        textFilter={textFilter}
+        handleRemove={handleRemove}
+      />
     </div>
   );
 };
