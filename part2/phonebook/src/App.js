@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
+import "./App.css";
 import api from "./services/persons";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
+import Notification from "./Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newPerson, setNewPerson] = useState({ name: "", number: "" });
   const [textFilter, setTextFilter] = useState("");
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     updateAllPeople();
   }, []);
 
   const updateAllPeople = () =>
-    api.getPeople().then((response) => setPersons(response.data));
+    api.getAll().then((response) => setPersons(response.data));
 
   const handleAddOrUpdate = (event) => {
     event.preventDefault();
@@ -27,13 +30,17 @@ const App = () => {
         `${newPerson.name} is already in the phonebook. Update the number?`
       )
     ) {
-      api.updatePerson(matchingPerson.id, newPerson).then(({ data }) => {
+      api.update(matchingPerson.id, newPerson).then(({ data }) => {
+        setNotification(`${newPerson.name} updated!`);
+        setTimeout(() => setNotification(null), 3000);
         setNewPerson({ name: "", number: "" });
         updateAllPeople();
       });
     } else {
-      api.createPerson(newPerson).then(({ data }) => {
+      api.create(newPerson).then(({ data }) => {
         setPersons([...persons, data]);
+        setNotification(`${newPerson.name} added!`);
+        setTimeout(() => setNotification(null), 3000);
         setNewPerson({ name: "", number: "" });
       });
     }
@@ -41,7 +48,9 @@ const App = () => {
 
   const handleRemove = (name, id) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-      api.removePerson(id).then(() => {
+      api.remove(id).then(() => {
+        setNotification(`${name} removed!`);
+        setTimeout(() => setNotification(null), 3000);
         setNewPerson({ name: "", number: "" });
         updateAllPeople();
       });
@@ -51,6 +60,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter textFilter={textFilter} setTextFilter={setTextFilter} />
       <h3>Add a new person</h3>
       <PersonForm
