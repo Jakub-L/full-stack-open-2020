@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import personService from "./services/persons";
+import api from "./services/persons";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
@@ -10,10 +10,13 @@ const App = () => {
   const [textFilter, setTextFilter] = useState("");
 
   useEffect(() => {
-    personService.getAll().then((response) => setPersons(response.data));
+    updateAllPeople();
   }, []);
 
-  const handleAdd = (event) => {
+  const updateAllPeople = () =>
+    api.getPeople().then((response) => setPersons(response.data));
+
+  const handleAddOrUpdate = (event) => {
     event.preventDefault();
     const [matchingPerson] = persons.filter(
       ({ name }) => name === newPerson.name
@@ -24,12 +27,12 @@ const App = () => {
         `${newPerson.name} is already in the phonebook. Update the number?`
       )
     ) {
-      personService.update(matchingPerson.id, newPerson).then(({ data }) => {
+      api.updatePerson(matchingPerson.id, newPerson).then(({ data }) => {
         setNewPerson({ name: "", number: "" });
-        personService.getAll().then((response) => setPersons(response.data));
+        updateAllPeople();
       });
     } else {
-      personService.create(newPerson).then(({ data }) => {
+      api.createPerson(newPerson).then(({ data }) => {
         setPersons([...persons, data]);
         setNewPerson({ name: "", number: "" });
       });
@@ -38,9 +41,9 @@ const App = () => {
 
   const handleRemove = (name, id) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-      personService.remove(id).then(() => {
+      api.removePerson(id).then(() => {
         setNewPerson({ name: "", number: "" });
-        personService.getAll().then((response) => setPersons(response.data));
+        updateAllPeople();
       });
     }
   };
@@ -53,7 +56,7 @@ const App = () => {
       <PersonForm
         newPerson={newPerson}
         setNewPerson={setNewPerson}
-        handleAdd={handleAdd}
+        handleAddOrUpdate={handleAddOrUpdate}
       />
       <h2>Numbers</h2>
       <Persons
