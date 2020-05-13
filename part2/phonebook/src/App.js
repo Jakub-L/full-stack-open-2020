@@ -13,10 +13,21 @@ const App = () => {
     personService.getAll().then((response) => setPersons(response.data));
   }, []);
 
-  const addName = (event) => {
+  const handleAdd = (event) => {
     event.preventDefault();
-    if (persons.some(({ name }) => name === newPerson.name)) {
-      alert(`${newPerson.name} is already in the phonebook`);
+    const [matchingPerson] = persons.filter(
+      ({ name }) => name === newPerson.name
+    );
+    if (
+      matchingPerson &&
+      window.confirm(
+        `${newPerson.name} is already in the phonebook. Update the number?`
+      )
+    ) {
+      personService.update(matchingPerson.id, newPerson).then(({ data }) => {
+        setNewPerson({ name: "", number: "" });
+        personService.getAll().then((response) => setPersons(response.data));
+      });
     } else {
       personService.create(newPerson).then(({ data }) => {
         setPersons([...persons, data]);
@@ -42,7 +53,7 @@ const App = () => {
       <PersonForm
         newPerson={newPerson}
         setNewPerson={setNewPerson}
-        addName={addName}
+        handleAdd={handleAdd}
       />
       <h2>Numbers</h2>
       <Persons
