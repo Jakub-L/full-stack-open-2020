@@ -11,6 +11,7 @@ const App = () => {
   const [newPerson, setNewPerson] = useState({ name: "", number: "" });
   const [textFilter, setTextFilter] = useState("");
   const [notification, setNotification] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     updateAllPeople();
@@ -48,19 +49,30 @@ const App = () => {
 
   const handleRemove = (name, id) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-      api.remove(id).then(() => {
-        setNotification(`${name} removed!`);
-        setTimeout(() => setNotification(null), 3000);
-        setNewPerson({ name: "", number: "" });
-        updateAllPeople();
-      });
+      api
+        .remove(id)
+        .then(() => {
+          setNotification(`${name} removed!`);
+          setTimeout(() => setNotification(null), 3000);
+          setNewPerson({ name: "", number: "" });
+          updateAllPeople();
+        })
+        .catch(() => {
+          setError(true);
+          setNotification(`${name} has already been removed from the server!`);
+          updateAllPeople();
+          setTimeout(() => {
+            setNotification(null);
+            setError(false);
+          }, 3000);
+        });
     }
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification error={error} message={notification} />
       <Filter textFilter={textFilter} setTextFilter={setTextFilter} />
       <h3>Add a new person</h3>
       <PersonForm
